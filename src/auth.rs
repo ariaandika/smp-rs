@@ -1,24 +1,39 @@
-use std::{convert::Infallible, future::ready, sync::LazyLock};
-
 use axum::{
     extract::FromRequestParts,
     http::request::Parts,
-    response::{Html, IntoResponse, IntoResponseParts, Redirect, Response, ResponseParts},
-    routing::{any, post},
+    response::{IntoResponse, IntoResponseParts, Redirect, Response, ResponseParts},
+    routing::{any, get},
     Form, RequestPartsExt, Router,
 };
 use axum_extra::extract::{cookie::Cookie, CookieJar};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey};
 use rinja::Template;
 use serde::{Deserialize, Serialize};
+use std::{convert::Infallible, future::ready, sync::LazyLock};
 
 pub use session::{Session, SetSession};
+
+use crate::page::PageHandler;
 
 const COOKIE_KEY: &str = "token";
 const COOKIE_RM: &str = "token=; Path=/";
 
 static DECODE_KEY: LazyLock<DecodingKey> = LazyLock::new(|| DecodingKey::from_secret(b"Deez"));
 static ENCODE_KEY: LazyLock<EncodingKey> = LazyLock::new(|| EncodingKey::from_secret(b"Deez"));
+
+pub fn routes() -> Router {
+    Router::new()
+        .route("/login", get(PageHandler::new(LoginPage)).post(login))
+        .route(
+            "/logout",
+            any(|| {
+                ready((
+                    CookieJar::new().add(Cookie::build("token").removal().path("/").build()),
+                    Redirect::to("/login"),
+                ))
+            }),
+        )
+}
 
 #[derive(Template)]
 #[template(path = "login.html")]
@@ -32,25 +47,7 @@ pub struct Login {
 }
 
 pub async fn login(Form(login): Form<Login>) -> (SetSession, Redirect) {
-    let session = Session::new(login.name);
-    (SetSession(session),Redirect::to("/"))
-}
-
-pub fn routes() -> Router {
-    Router::new()
-        .route(
-            "/login",
-            post(|| ready(Html(LoginPage.render().unwrap_or_else(|e| e.to_string())))),
-        )
-        .route(
-            "/logout",
-            any(|| {
-                ready((
-                    CookieJar::new().add(Cookie::build("token").removal().path("/").build()),
-                    Redirect::to("/login"),
-                ))
-            }),
-        )
+    (SetSession(Session::new(login.name)),Redirect::to("/"))
 }
 
 mod session {
