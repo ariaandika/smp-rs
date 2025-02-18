@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full overflow-x-hidden">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="/assets/output.css">
+  <script src="/assets/carousel.js"></script>
+  <style>
+    .embla {}
+    .embla__container { }
+    .embla__slide {
+      flex: 0 0 100%;
+      min-width: 0;
+    }
+  </style>
+</head>
+<body class="h-full overflow-x-hidden">
+  <nav class="fixed top-0 left-0 w-full bg-primary shadow-md z-99">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="#beranda"><svg class="text-white size-12" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></a>
+      <div class="flex gap-16 text-2xl text-white font-bold">
+        <a href="#beranda">Beranda</a>
+        <a href="#kegiatan">Kegiatan</a>
+        <a href="#tentang">Tentang</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Beranda -->
+  <section id="beranda" class="h-full p-8 grid place-items-center">
+    <!-- Inner Container -->
+    <section class="container max-w-[72rem] mx-auto grid gap-4 text-center">
+      <h1 class="text-6xl tracking-wide font-bold text-primary">SMP Ibu Kartini</h1>
+      <p class="text-pretty">
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum iure totam molestiae, a id rerum, qui labore animi consectetur sint porro iusto quo saepe tempora reprehenderit vitae repellendus impedit soluta?
+      </p>
+    </section>
+  </section>
+
+  <!-- Kegiatan -->
+  <section id="kegiatan" class="relative h-full p-8 grid place-items-center text-white bg-primary shadow-lg">
+    <!-- Carousel -->
+    <section class="embla container h-3/4">
+      <section class="embla__container h-full flex gap-8">
+        <!-- Kegiatan 1 -->
+        <section class="embla__slide h-full flex flex-col">
+          <h3 class="mb-4 text-4xl font-bold">Kegiatan 1</h3>
+          <section class="flex-grow flex flex-col">
+            <div class="mb-4 p-8 flex-grow grid place-items-center border-2 border-white rounded-md" id="image">
+                &LT;IMAGE&GT;
+            </div>
+            <p class="text-xl font-bold">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo praesentium adipisci cum consequuntur exercitationem consectetur animi quibusdam assumenda veritatis id. Libero dolor quo soluta assumenda exercitationem sapiente similique eaque at!
+            </p>
+          </section>
+        </section>
+        <!-- Kegiatan 2 -->
+        <section class="embla__slide h-full flex flex-col">
+          <h3 class="mb-4 text-4xl font-bold">Kegiatan 2</h3>
+          <section class="flex-grow flex flex-col">
+            <div class="mb-4 p-8 flex-grow grid place-items-center border-2 border-white rounded-md" id="image">
+                &LT;IMAGE&GT;
+            </div>
+            <p class="text-xl font-bold">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo praesentium adipisci cum consequuntur exercitationem consectetur animi quibusdam assumenda veritatis id. Libero dolor quo soluta assumenda exercitationem sapiente similique eaque at!
+            </p>
+          </section>
+        </section>
+      </section>
+    </section>
+
+    <svg class="absolute top-0 -translate-y-1/1 left-0 w-full fill-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,192L48,181.3C96,171,192,149,288,154.7C384,160,480,192,576,208C672,224,768,224,864,218.7C960,213,1056,203,1152,192C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+    <svg class="absolute bottom-0 rotate-180 translate-y-1/1 left-0 w-full fill-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,192L48,181.3C96,171,192,149,288,154.7C384,160,480,192,576,208C672,224,768,224,864,218.7C960,213,1056,203,1152,192C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+
+    <script type="text/javascript">
+      const emblaNode = document.querySelector('.embla')
+      const options = { loop: false }
+      const emblaApi = EmblaCarousel(emblaNode, options)
+
+      console.log(emblaApi.slideNodes()) // Access API
+    </script>
+  </section>
+
+  <!-- Tentang -->
+  <section id="tentang" class="h-full p-8 grid place-items-center">
+  </section>
+
+  <!-- Footer -->
+  <section class="text-white bg-primary">
+    <div class="py-6 container mx-auto font-bold">
+      @2024 SMP Ibu Kartini
+    </div>
+  </section>
+</body>
+</html>
+

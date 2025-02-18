@@ -2,18 +2,15 @@ use axum::{
     extract::FromRequestParts,
     http::request::Parts,
     response::{IntoResponse, IntoResponseParts, Redirect, Response, ResponseParts},
-    routing::{any, get},
+    routing::{any, post},
     Form, RequestPartsExt, Router,
 };
 use axum_extra::extract::{cookie::Cookie, CookieJar};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey};
-use rinja::Template;
 use serde::{Deserialize, Serialize};
 use std::{convert::Infallible, future::ready, sync::LazyLock};
 
 pub use session::{Session, SetSession};
-
-use crate::page::PageHandler;
 
 const COOKIE_KEY: &str = "token";
 const COOKIE_RM: &str = "token=; Path=/";
@@ -23,7 +20,7 @@ static ENCODE_KEY: LazyLock<EncodingKey> = LazyLock::new(|| EncodingKey::from_se
 
 pub fn routes() -> Router {
     Router::new()
-        .route("/login", get(PageHandler::new(LoginPage)).post(login))
+        .route("/login", post(login))
         .route(
             "/logout",
             any(|| {
@@ -34,10 +31,6 @@ pub fn routes() -> Router {
             }),
         )
 }
-
-#[derive(Template)]
-#[template(path = "login.html")]
-struct LoginPage;
 
 #[derive(Debug, Deserialize)]
 pub struct Login {

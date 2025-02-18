@@ -65,3 +65,19 @@ impl<T> Clone for PageHandler<T> {
     }
 }
 
+
+#[cfg(debug_assertions)]
+pub mod debug {
+    use std::future::Future;
+    use axum::{extract::Request, middleware::Next, response::Response};
+
+    use crate::TERA;
+
+    pub fn tera_reload(req: Request, next: Next) -> impl Future<Output = Response> {
+        if let Err(err) = TERA.write().unwrap().full_reload() {
+            tracing::error!("template error: {err}");
+        }
+        next.run(req)
+    }
+}
+
