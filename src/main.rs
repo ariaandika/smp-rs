@@ -1,11 +1,18 @@
 use smp_rs::error::{check_env, SetupError};
-use std::net::TcpListener as StdTcp;
+use std::{net::TcpListener as StdTcp, process::exit};
 use tokio::net::TcpListener;
 use tracing_subscriber::EnvFilter;
 
 const ADDR: &str = "localhost:3000";
 
-fn main() -> Result<(), SetupError> {
+fn main() {
+    if let Err(err) = app() {
+        eprintln!("{err}");
+        exit(1);
+    }
+}
+
+fn app() -> Result<(), SetupError> {
     dotenvy::dotenv().ok();
 
     check_env("JWT_SECRET")?;
