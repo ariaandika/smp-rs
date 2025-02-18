@@ -7,7 +7,7 @@ pub mod page;
 pub mod error;
 
 pub mod auth;
-pub mod home;
+pub mod handlers;
 
 pub static TERA: LazyLock<RwLock<Tera>> = LazyLock::new(||{
     match Tera::new("templates/**/*.html") {
@@ -28,8 +28,8 @@ pub fn routes() -> Router {
 
     router
         .nest_service("/assets", ServeDir::new("assets"))
-        .merge(auth::routes())
-        .merge(home::routes())
+        .merge(handlers::auth::routes())
+        .merge(handlers::home::routes())
 }
 
 

@@ -2,66 +2,70 @@ use axum::{
     extract::FromRequestParts,
     http::request::Parts,
     response::{IntoResponse, IntoResponseParts, Redirect, Response, ResponseParts},
-    routing::{any, post},
-    Form, RequestPartsExt, Router,
+    RequestPartsExt,
 };
 use axum_extra::extract::{cookie::Cookie, CookieJar};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey};
 use serde::{Deserialize, Serialize};
-use std::{convert::Infallible, future::ready, sync::LazyLock};
+use sqlx::prelude::FromRow;
+use std::{convert::Infallible, sync::LazyLock};
 
-pub use session::{Session, SetSession};
+pub use session::{Session, cookie, logout_cookie};
 
-const COOKIE_KEY: &str = "token";
-const COOKIE_RM: &str = "token=; Path=/";
+use crate::error::env;
 
-static DECODE_KEY: LazyLock<DecodingKey> = LazyLock::new(|| DecodingKey::from_secret(b"Deez"));
-static ENCODE_KEY: LazyLock<EncodingKey> = LazyLock::new(|| EncodingKey::from_secret(b"Deez"));
-
-pub fn routes() -> Router {
-    Router::new()
-        .route("/login", post(login))
-        .route(
-            "/logout",
-            any(|| {
-                ready((
-                    CookieJar::new().add(Cookie::build("token").removal().path("/").build()),
-                    Redirect::to("/login"),
-                ))
-            }),
-        )
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Login {
-    name: String,
-    #[allow(dead_code)]
-    password: String,
-}
-
-pub async fn login(Form(login): Form<Login>) -> (SetSession, Redirect) {
-    (SetSession(Session::new(login.name)),Redirect::to("/"))
+/// `users` table
+#[derive(Debug, Deserialize, FromRow)]
+pub struct Users {
+    pub name: String,
+    pub password: String,
 }
 
 mod session {
     use super::*;
 
+    const COOKIE_KEY: &str = "token";
+
+    static DECODE_KEY: LazyLock<DecodingKey> =
+        LazyLock::new(|| DecodingKey::from_secret(env("JWT_SECRET").expect("checked").as_bytes()));
+    static ENCODE_KEY: LazyLock<EncodingKey> =
+        LazyLock::new(|| EncodingKey::from_secret(env("JWT_SECRET").expect("checked").as_bytes()));
+
+    // following cookie functions is placed locally to maintain the same config
+    // cookie builder type is private
+
+    /// create set session cookie
+    pub fn cookie(value: String) -> Cookie<'static> {
+        Cookie::build((COOKIE_KEY,value)).path("/").build()
+    }
+
+    /// create removal session cookie
+    pub fn logout_cookie<'a>() -> Cookie<'a> {
+        Cookie::build(COOKIE_KEY).removal().path("/").build()
+    }
+
+    /// client session
+    ///
+    /// # `FromRequestParts`
+    ///
+    /// extract token from cookie and decode it to acquire session
+    ///
+    /// # `IntoResponseParts`
+    ///
+    /// encode to a token then set a cookie
     #[derive(Debug, Serialize, Deserialize)]
     pub struct Session {
-        exp: u64,
-        name: String,
+        pub exp: u64,
+        pub name: String,
     }
 
     impl Session {
+        /// create new session
         pub fn new(name: String) -> Self {
             Self {
                 exp: 10000000000,
                 name,
             }
-        }
-
-        pub fn into_name(self) -> String {
-            self.name
         }
     }
 
@@ -87,6 +91,16 @@ mod session {
         }
     }
 
+    impl IntoResponseParts for Session {
+        type Error = Infallible;
+
+        fn into_response_parts(self, res: ResponseParts) -> Result<ResponseParts, Self::Error> {
+            let token = encode(&Default::default(), &self, &ENCODE_KEY).unwrap();
+            CookieJar::new().add(cookie(token)).into_response_parts(res)
+        }
+    }
+
+    /// [`Session`] error response
     pub enum SessionRejection {
         NoSession,
         InvalidToken,
@@ -96,23 +110,12 @@ mod session {
         fn into_response(self) -> Response {
             match self {
                 SessionRejection::NoSession => Redirect::to("/login").into_response(),
-                SessionRejection::InvalidToken => {
-                    ([("Set-Cookie", COOKIE_RM)], Redirect::to("/login")).into_response()
-                }
+                SessionRejection::InvalidToken => (
+                    CookieJar::new().add(logout_cookie()),
+                    Redirect::to("/login"),
+                )
+                    .into_response(),
             }
-        }
-    }
-
-    pub struct SetSession(pub Session);
-
-    impl IntoResponseParts for SetSession {
-        type Error = Infallible;
-
-        fn into_response_parts(self, res: ResponseParts) -> Result<ResponseParts, Self::Error> {
-            let token = encode(&Default::default(), &self.0, &ENCODE_KEY).unwrap();
-            CookieJar::new()
-                .add(Cookie::build((COOKIE_KEY, token)).path("/").build())
-                .into_response_parts(res)
         }
     }
 }
