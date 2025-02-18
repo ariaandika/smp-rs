@@ -2,6 +2,7 @@ use axum::{response::Html, Router};
 use rinja::Template;
 
 pub mod auth;
+pub mod error;
 
 pub fn routes() -> Router {
     Router::new()
