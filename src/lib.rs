@@ -20,16 +20,16 @@ pub static TERA: LazyLock<RwLock<Tera>> = LazyLock::new(||{
 });
 
 pub fn routes() -> Router {
-    let mut router = Router::new();
-
-    if cfg!(debug_assertions) {
-        router = router.layer(middleware::from_fn(page::debug::tera_reload));
-    }
-
-    router
+    let router = Router::new()
         .nest_service("/assets", ServeDir::new("assets"))
         .merge(handlers::auth::routes())
-        .merge(handlers::home::routes())
+        .merge(handlers::home::routes());
+
+    if cfg!(debug_assertions) {
+        router.layer(middleware::from_fn(page::debug::tera_reload))
+    } else {
+        router
+    }
 }
 
 

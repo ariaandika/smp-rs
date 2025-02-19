@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" href="/assets/output.css">
+</head>
+<body>
+
+  <section class="h-full grid place-items-center bg-gray-200">
+
+    <section class="min-w-104">
+      <h1 class="mb-4 text-4xl text-center text-primary font-bold">Login to continue</h1>
+      <form method="post" class="p-8 flex flex-col gap-4 shadow-md bg-white rounded-md">
+        <div class="grid gap-2">
+          <span>username</span>
+          <input name="name" class="input" required>
+        </div>
+        <div class="grid gap-2">
+          <span>password</span>
+          <input type="password" name="password" class="input" required>
+        </div>
+        <div id="error" class="text-red-600 font-bold">
+          {% if error %}
+            {{ error }}
+          {% else %}
+            &ThickSpace;
+          {% endif %}
+        </div>
+        <div>
+          <button
+            class="w-full py-1.5 font-bold rounded-md shadow-md
+            bg-primary text-white hover:bg-primary/90 transition-colors
+            outline-offset-2 focus:outline-2 focus:outline-primary"
+          >
+            Login
+          </button>
+        </div>
+      </form>
+    </section>
+
+  </section>
+
+</body>
+</html>
+

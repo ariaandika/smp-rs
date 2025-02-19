@@ -2,6 +2,36 @@ use std::{future::{ready, Ready}, sync::Arc};
 
 use axum::{extract::Request, handler::Handler, http::StatusCode, response::{Html, IntoResponse, Response}};
 use rinja::Template;
+use tera::Context;
+
+use crate::TERA;
+
+//
+// TeraPage
+//
+
+pub struct TeraPage {
+    name: &'static str,
+    context: Context,
+}
+
+impl TeraPage {
+    pub fn render(name: &'static str, context: Context) -> TeraPage {
+        Self { name, context }
+    }
+}
+
+impl IntoResponse for TeraPage {
+    fn into_response(self) -> Response {
+        match TERA.read().unwrap().render(self.name, &self.context) {
+            Ok(ok) => Html(ok).into_response(),
+            Err(err) => {
+                tracing::error!("render error: {err}");
+                StatusCode::INTERNAL_SERVER_ERROR.into_response()
+            },
+        }
+    }
+}
 
 //
 // Page

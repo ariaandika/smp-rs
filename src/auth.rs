@@ -15,9 +15,10 @@ pub use session::{Session, cookie, logout_cookie};
 use crate::error::env;
 
 /// `users` table
-#[derive(Debug, Deserialize, FromRow)]
+#[derive(Debug, Serialize, Deserialize, FromRow)]
 pub struct Users {
     pub name: String,
+    #[serde(skip_serializing,default)]
     pub password: String,
 }
 
@@ -36,12 +37,20 @@ mod session {
 
     /// create set session cookie
     pub fn cookie(value: String) -> Cookie<'static> {
-        Cookie::build((COOKIE_KEY,value)).path("/").build()
+        let c = Cookie::build((COOKIE_KEY,value)).path("/");
+        match cfg!(debug_assertions) {
+            true => c,
+            false => c.http_only(true).secure(true),
+        }.build()
     }
 
     /// create removal session cookie
     pub fn logout_cookie<'a>() -> Cookie<'a> {
-        Cookie::build(COOKIE_KEY).removal().path("/").build()
+        let c = Cookie::build(COOKIE_KEY).removal().path("/");
+        match cfg!(debug_assertions) {
+            true => c,
+            false => c.http_only(true).secure(true),
+        }.build()
     }
 
     /// client session
@@ -56,15 +65,15 @@ mod session {
     #[derive(Debug, Serialize, Deserialize)]
     pub struct Session {
         pub exp: u64,
-        pub name: String,
+        pub user: Users,
     }
 
     impl Session {
         /// create new session
-        pub fn new(name: String) -> Self {
+        pub fn new(user: Users) -> Self {
             Self {
                 exp: 10000000000,
-                name,
+                user,
             }
         }
     }

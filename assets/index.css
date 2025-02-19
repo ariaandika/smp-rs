@@ -5,7 +5,22 @@
 }
 
 @layer base {
-  html,body {
-    @apply scroll-smooth;
+  html {
+    @apply h-screen scroll-smooth;
+  }
+
+  body {
+    @apply h-full;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+}
+
+@layer component {
+  .input {
+    @apply px-3 py-1.5 border border-2 border-gray-300 focus:outline-none focus:border-primary rounded-md;
   }
 }
