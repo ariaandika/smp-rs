@@ -5,8 +5,12 @@
 }
 
 @layer base {
+  :root {
+    @apply scroll-smooth;
+  }
+
   html {
-    @apply h-screen scroll-smooth;
+    @apply h-screen;
   }
 
   body {
