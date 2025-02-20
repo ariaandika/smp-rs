@@ -1,0 +1,19 @@
+<section class="embla w-full">
+  <section class="embla__container w-full flex gap-8">
+
+    {% for event in events %}
+    <section class="embla__slide w-full flex flex-col">
+      <h3 class="mb-4 text-4xl font-bold">{{ event.title }}</h3>
+
+      <div id="image" class="relative mb-4 -grow grid place-items-center overflow-hidden border-2 border-white rounded-md">
+        <!-- <img class="absolute object-cover" src="/assets/local/{{ event.image }}" alt=""> -->
+        <img class="object-cover" src="/assets/local/{{ event.image }}" alt="">
+      </div>
+
+      <p class="text-xl font-bold">{{ event.body }}</p>
+
+    </section>
+    {% endfor %}
+
+  </section>
+</section>

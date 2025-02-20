@@ -4,8 +4,8 @@ use axum::{http::StatusCode, response::IntoResponse};
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
-    #[error("database error: {0}")]
-    Db(#[from] sqlx::Error),
+    #[error("db error: {0}")]
+    Db2(#[from] rusqlite::Error),
     #[error("tokio error: {0}")]
     Tokio(#[from] tokio::task::JoinError),
 }
@@ -13,7 +13,7 @@ pub enum Error {
 impl Error {
     fn log(&self) {
         let err: &dyn std::fmt::Display = match self {
-            Error::Db(err) => err as _,
+            Error::Db2(err) => err as _,
             Error::Tokio(err) => err as _,
         };
 
@@ -25,7 +25,7 @@ impl IntoResponse for Error {
     fn into_response(self) -> axum::response::Response {
         self.log();
         match self {
-            Error::Db(_) | Error::Tokio(_)
+            Error::Db2(_) | Error::Tokio(_)
                 => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
         }
     }
@@ -40,7 +40,7 @@ pub enum SetupError {
     #[error("failed to get {0:?}: {1}")]
     Var(&'static str, std::env::VarError),
     #[error("db error: {0}")]
-    Db(#[from] sqlx::Error),
+    Db2(#[from] rusqlite::Error),
 }
 
 pub fn env(name: &'static str) -> Result<String, SetupError> {

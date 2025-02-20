@@ -1,7 +1,5 @@
-use axum::Extension;
 use smp_rs::error::{env, SetupError};
-use sqlx::postgres::PgPoolOptions;
-use std::{net::TcpListener as StdTcp, process::exit, time::Duration};
+use std::{net::TcpListener as StdTcp, process::exit};
 use tokio::net::TcpListener;
 use tracing_subscriber::EnvFilter;
 
@@ -31,17 +29,10 @@ fn app() -> Result<(), SetupError> {
         .enable_all()
         .build()?
         .block_on(async move {
-            let db = PgPoolOptions::new()
-                .acquire_timeout(Duration::from_secs(5))
-                .connect_lazy(&env("DATABASE_URL")?)?;
-
-            let routes = smp_rs::routes()
-                .layer(Extension(db));
-
-            tracing::info!("listening: {}", tcp.local_addr().unwrap());
-
+            let app = smp_rs::setup()?;
             let tcp = TcpListener::from_std(tcp).map_err(SetupError::Tcp)?;
-            axum::serve(tcp, routes).await.map_err(Into::into)
+            tracing::info!("listening: {}", tcp.local_addr().unwrap());
+            axum::serve(tcp, app).await.map_err(Into::into)
         })
 }
 

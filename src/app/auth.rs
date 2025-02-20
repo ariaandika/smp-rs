@@ -1,26 +1,24 @@
 use argon2::{Argon2, PasswordHash, PasswordVerifier};
 use axum::{
-    response::{IntoResponse, Redirect},
-    routing::{any, get},
-    Extension, Form, Router,
+    extract::State, response::{IntoResponse, Redirect}, routing::{any, get}, Form, Router
 };
 use axum_extra::extract::CookieJar;
+use rusqlite::OptionalExtension;
 use serde::Deserialize;
-use sqlx::PgPool;
 use tera::Context;
 
-use crate::{auth::{logout_cookie, Session, Users}, error::Error, page::TeraPage};
+use crate::{auth::{logout_cookie, Session, Users}, error::Error, page::TeraPage, Global};
 
 const STOCK_PASSWD: &str = "$argon2id$v=19$m=19456,t=2,p=1$3lYyG6puInCkN/I/NXEQ9Q$CCIFuJ8fNDvSr0bPXYCoSCytqVvp0j7GTVmyLdNhrQQ";
 
-pub fn routes() -> Router {
+pub fn routes() -> Router<Global> {
     Router::new()
         .route("/login", get(login_page).post(login))
         .route("/logout", any(logout))
         .nest("/admin", Router::new().route("/", get(admin_page)))
 }
 
-async fn admin_page(_: Session) -> TeraPage {
+async fn admin_page(_: Session, State(_): State<Global>) -> TeraPage {
     TeraPage::render("admin.html", Context::new())
 }
 
@@ -33,13 +31,15 @@ async fn logout() -> (CookieJar, Redirect) {
 }
 
 async fn login(
-    Extension(db): Extension<PgPool>,
+    State(global): State<Global>,
     Form(login): Form<Login>,
 ) -> Result<LoginResponse, Error> {
-    let user = sqlx::query_as::<_, Users>("select * from users where name = $1")
-        .bind(&login.name)
-        .fetch_optional(&db)
-        .await?;
+    let user = tokio::task::spawn_blocking(move||{
+        let name = login.name.clone();
+        let db = global.conn.lock().unwrap();
+        let mut stmt = db.prepare_cached("select * from users where name = $1")?;
+        stmt.query_row(&[&name],Users::from_row).optional()
+    }).await?? ;
 
     let passwd = login.password.clone();
     let hashed = user.as_ref().map(|e|e.password.clone());

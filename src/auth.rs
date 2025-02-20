@@ -6,8 +6,8 @@ use axum::{
 };
 use axum_extra::extract::{cookie::Cookie, CookieJar};
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey};
+use rusqlite::Row;
 use serde::{Deserialize, Serialize};
-use sqlx::prelude::FromRow;
 use std::{convert::Infallible, sync::LazyLock};
 
 pub use session::{Session, cookie, logout_cookie};
@@ -15,11 +15,20 @@ pub use session::{Session, cookie, logout_cookie};
 use crate::error::env;
 
 /// `users` table
-#[derive(Debug, Serialize, Deserialize, FromRow)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Users {
     pub name: String,
     #[serde(skip_serializing,default)]
     pub password: String,
+}
+
+impl Users {
+    pub fn from_row(value: &Row<'_>) -> rusqlite::Result<Self> {
+        Ok(Self {
+            name: value.get("name")?,
+            password: value.get("password")?,
+        })
+    }
 }
 
 mod session {
