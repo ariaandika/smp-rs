@@ -23,12 +23,13 @@ impl EventCache {
     }
 
     pub fn invalidate(&self, conn: &Connection) -> rusqlite::Result<()> {
-        let mut stmt = conn.prepare_cached("select * from events")?;
+        let mut stmt = conn.prepare_cached("select rowid,* from events")?;
         let mut rows = stmt.query([])?;
         let mut data = vec![];
 
         while let Some(row) = rows.next()? {
             data.push(Events {
+                rowid: row.get("rowid")?,
                 title: row.get("title")?,
                 body: row.get("body")?,
                 image: row.get("image")?,

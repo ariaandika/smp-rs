@@ -27,4 +27,8 @@
   .input {
     @apply px-3 py-1.5 border border-2 border-gray-300 focus:outline-none focus:border-primary rounded-md;
   }
+
+  .admin-btn {
+    @apply block px-3 py-3 hover:bg-gray-700 transition-colors cursor-pointer rounded-md;
+  }
 }

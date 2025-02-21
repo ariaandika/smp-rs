@@ -1,43 +1,66 @@
 use axum::{
-    extract::{multipart, Multipart, State}, http::StatusCode, response::IntoResponse, routing::get, Json, Router,
+    extract::{multipart, Multipart, Path, State}, http::StatusCode, response::{IntoResponse, Redirect}, routing::{get, post}, Json, Router,
 };
 use rand::{distr, Rng};
 use serde::{Deserialize, Serialize};
 use std::io;
 use tera::Context;
 
-use crate::{page::TeraPage, Global};
+use crate::{auth::Session, page::TeraPage, Global};
 
 pub fn routes() -> Router<Global> {
     Router::new()
-        .route("/events", get(list_page))
         .nest(
-            "/admin",
+            "/admin/events",
             Router::new()
-                .route("/events", get(list_page))
-                .route("/events/add", get(add_page).post(add)),
+                .route("/", get(list_page))
+                .route("/add", get(add_page).post(add))
+                .route("/{id}/delete", post(rm)),
         )
 }
 
-async fn list(State(global): State<Global>) -> Json<Vec<Events>> {
+pub async fn list(State(global): State<Global>) -> Json<Vec<Events>> {
     Json(global.events.read().clone())
 }
 
-async fn list_page(state: State<Global>) -> TeraPage {
+async fn list_page(
+    Session { user, .. }: Session,
+    state: State<Global>
+) -> TeraPage {
     let Json(events) = list(state).await;
     let mut c = Context::new();
     c.insert("events", &events);
+    c.insert("name", &user.name);
     TeraPage::render("admin/events.html", c)
 }
 
-async fn add_page() -> TeraPage {
-    TeraPage::render("admin/events.add.html", Context::new())
+async fn add_page(Session { user, .. }: Session) -> TeraPage {
+    let mut c = Context::new();
+    c.insert("name", &user.name);
+    TeraPage::render("admin/events.add.html", c)
+}
+
+async fn rm(
+    Path(id): Path<u32>,
+    _: Session,
+    State(global): State<Global>,
+) -> Result<Redirect, EventActionError> {
+    tokio::task::spawn_blocking(move||{
+        let crate::GlobalState { conn, events } = &*global;
+        let conn = conn.lock().unwrap();
+        let mut stmt = conn.prepare("delete from events where rowid = ?1")?;
+        stmt.execute((id,))?;
+        events.invalidate(&conn)?;
+        Ok::<_, EventActionError>(())
+    }).await??;
+
+    Ok(Redirect::to("/admin/events"))
 }
 
 async fn add(
     State(global): State<Global>,
     mut form: Multipart,
-) -> Result<(), AddEventError> {
+) -> Result<Redirect, EventActionError> {
     let mut title = None;
     let mut body = None;
     let mut image = None;
@@ -51,9 +74,9 @@ async fn add(
         }
     }
 
-    let title = title.ok_or(AddEventError::Field("title"))?;
-    let body = body.ok_or(AddEventError::Field("body"))?;
-    let image = image.ok_or(AddEventError::Field("body"))?;
+    let title = title.ok_or(EventActionError::Field("title"))?;
+    let body = body.ok_or(EventActionError::Field("body"))?;
+    let image = image.ok_or(EventActionError::Field("body"))?;
 
     let rng = rand::rng();
     let filename = rng.sample_iter(distr::Alphanumeric).take(5).map(char::from).collect::<String>();
@@ -72,19 +95,22 @@ async fn add(
                 events.invalidate(&conn)?;
             }
         }
-        Ok(())
-    }).await?
+        Ok::<_, EventActionError>(())
+    }).await??;
+
+    Ok(Redirect::to("/admin/events"))
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Events {
+    pub rowid: usize,
     pub title: String,
     pub body: String,
     pub image: String,
 }
 
 #[derive(thiserror::Error, Debug)]
-enum AddEventError {
+enum EventActionError {
     #[error(transparent)]
     Multipart(#[from] multipart::MultipartError),
     #[error("form field missing: {0}")]
@@ -97,7 +123,7 @@ enum AddEventError {
     Tokio(#[from] tokio::task::JoinError),
 }
 
-impl IntoResponse for AddEventError {
+impl IntoResponse for EventActionError {
     fn into_response(self) -> axum::response::Response {
         tracing::error!("{self}");
         StatusCode::INTERNAL_SERVER_ERROR.into_response()

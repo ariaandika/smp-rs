@@ -18,8 +18,8 @@ pub fn routes() -> Router<Global> {
         .nest("/admin", Router::new().route("/", get(admin_page)))
 }
 
-async fn admin_page(_: Session, State(_): State<Global>) -> TeraPage {
-    TeraPage::render("admin.html", Context::new())
+async fn admin_page(_: Session) -> Redirect {
+    Redirect::to("/admin/events")
 }
 
 async fn login_page() -> TeraPage {

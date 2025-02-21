@@ -1,20 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
+{% extends "admin.layout.html" %}
 
+{% block body %}
+<section class="relative p-8 bg-gray-50">
 
-<form method="post" enctype="multipart/form-data">
-  title <input type="text" name="title">
-  body <textarea name="body" id=""></textarea>
-  image <input type="file" name="image">
-  <button>submit</button>
-</form>
+  <form method="post" enctype="multipart/form-data" class="grid gap-3">
+    <h1 class="mb-2 text-4xl font-bold">Tambah Kegiatan</h1>
+    <div class="grid gap-2">
+      <span class="font-bold">judul</span>
+      <input type="text" name="title" class="input" required>
+    </div>
+    <div class="grid gap-2">
+      <span class="font-bold">deskripsi</span>
+      <textarea name="body" class="input" required></textarea>
+    </div>
+    <div class="grid gap-2">
+      <span class="font-bold">gambar</span>
+      <input type="file" name="image" class="input" required>
+    </div>
+    <div>
+      <button
+        class="px-4 py-2 font-bold rounded-md shadow-md
+        bg-primary text-white hover:bg-primary/90 transition-colors
+        outline-offset-2 focus:outline-2 focus:outline-primary"
+      >
+        Tambah
+      </button>
+    </div>
 
+  </form>
 
-</body>
-</html>
+  <a href="/admin/events" class="absolute bottom-8 font-bold rounded-md">kembali</a>
+</section>
+{% endblock %}
+

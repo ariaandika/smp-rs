@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin</title>
+  <link rel="stylesheet" href="/assets/output.css">
+</head>
+<body>
+  <section class="h-full p-8 flex flex-col bg-gray-200">
+
+    <!-- Title -->
+    <div class="mb-4 px-6 py-4 bg-gray-800 shadow-md rounded-md">
+      <h1 class="text-4xl text-white font-bold">Control Panel</h1>
+    </div>
+
+    <!-- APP -->
+    <section
+      class="min-h-[720px] grow grid bg-white border-r-4 border-primary shadow-lg rounded-lg overflow-hidden"
+      style="grid-template-columns: 1fr 5fr;"
+    >
+      <aside class="py-4 flex flex-col justify-between bg-gray-800 text-white font-bold">
+        <div class="">
+          <div class="mx-6 py-4 border-b-2 border-gray-600">
+            <div class="text-xl font-bold">Admin</div>
+            <div class="text-gray-500 font-bold">{{ name }}</div>
+          </div>
+          <div class="px-3 my-4 flex flex-col gap-2">
+            <a href="/admin/events" class="admin-btn">Kegiatan</a>
+          </div>
+        </div>
+        <div class="px-3">
+          <a href="/" class="admin-btn">Home</a>
+          <a href="/logout" class="admin-btn">Logout</a>
+        </div>
+      </aside>
+      {% block body %}{% endblock %}
+    </section>
+
+  </section>
+</body>
+</html>
+
