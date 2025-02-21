@@ -38,7 +38,7 @@ async fn login(
         let name = login.name.clone();
         let db = global.conn.lock().unwrap();
         let mut stmt = db.prepare_cached("select * from users where name = $1")?;
-        stmt.query_row(&[&name],Users::from_row).optional()
+        stmt.query_row([&name],Users::from_row).optional()
     }).await?? ;
 
     let passwd = login.password.clone();
