@@ -3,7 +3,7 @@ use std::{net::TcpListener as StdTcp, process::exit};
 use tokio::net::TcpListener;
 use tracing_subscriber::EnvFilter;
 
-const ADDR: &str = "localhost:3000";
+const ADDR: &str = "0.0.0.0:3000";
 
 fn main() {
     if let Err(err) = app() {
