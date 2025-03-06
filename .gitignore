@@ -3,3 +3,4 @@ assets/output.css
 .env
 assets/local
 db.sql*
+/stash
