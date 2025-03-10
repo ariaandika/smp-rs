@@ -22,8 +22,8 @@
           <input type="password" name="password" class="input" required>
         </div>
         <div id="error" class="text-red-600 font-bold">
-          {% if error %}
-            {{ error }}
+          {% if let Some(err) = error %}
+            {{ err }}
           {% else %}
             &ThickSpace;
           {% endif %}
