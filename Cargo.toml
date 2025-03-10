@@ -6,6 +6,7 @@ default-run = "smp-rs"
 
 [dependencies]
 argon2 = "0.5.3"
+axum = { version = "0.8.1", default-features = false, features = ["http1", "tokio", "json"] }
 dotenvy = "0.15.7"
 password-hash = { version = "0.5.0", features = ["getrandom"] }
-vice = { git = "https://github.com/ariaandika/vice.git", version = "0.1.0" }
+tokio = { version = "1.44.0", features = ["io-util", "net", "rt-multi-thread"] }

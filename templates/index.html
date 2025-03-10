@@ -1,108 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="/assets/output.css">
-  <script src="/assets/hx.js"></script>
-  <script src="/assets/carousel.js"></script>
-  <style>
-    .embla {}
-    .embla__container { }
-    .embla__slide {
-      flex: 0 0 100%;
-      min-width: 0;
-    }
-  </style>
-</head>
-<body>
-  <nav class="fixed top-0 left-0 w-full bg-primary shadow-md z-99">
-    <div class="container mx-auto px-8 py-3 flex items-center justify-between">
-      <a href="#beranda"><svg class="text-white size-12" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></a>
-      <div class="flex gap-16 text-2xl text-white font-bold">
-        <a href="#beranda">Beranda</a>
-        <a href="#kegiatan">Kegiatan</a>
-        <a href="#tentang">Tentang</a>
-      </div>
-    </div>
-  </nav>
+{% extends "layout.html" %}
 
-  <!-- Beranda -->
-  <section id="beranda" class="relative h-full p-8 grid place-items-center">
-    <!-- Inner Container -->
-    <section class="container max-w-[72rem] mx-auto grid gap-4 text-center">
-      <h1 class="text-6xl tracking-wide font-bold text-primary">SMP Ibu Kartini</h1>
-      <p class="text-pretty">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum iure totam molestiae, a id rerum, qui labore animi consectetur sint porro iusto quo saepe tempora reprehenderit vitae repellendus impedit soluta?
-      </p>
-    </section>
+{% block body %}
 
-    <svg class="absolute left-0 bottom-0 w-full md:translate-y-16 fill-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,192L48,181.3C96,171,192,149,288,154.7C384,160,480,192,576,208C672,224,768,224,864,218.7C960,213,1056,203,1152,192C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+<!-- Beranda -->
+<section id="beranda" class="relative h-full p-8 grid place-items-center">
+  <!-- Inner Container -->
+  <section class="container max-w-[72rem] mx-auto grid gap-4 text-center">
+    <h1 class="text-6xl tracking-wide font-bold text-primary">SMP Ibu Kartini</h1>
+    <p class="text-pretty">
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illum iure totam molestiae, a id rerum, qui labore animi consectetur sint porro iusto quo saepe tempora reprehenderit vitae repellendus impedit soluta?
+    </p>
   </section>
 
-  <!-- Kegiatan -->
-  <section id="kegiatan" class="relative h-full text-white bg-primary shadow-lg">
-    <!-- Carousel -->
-    <section
-      hx-get="/events" hx-trigger="load"
-      class="relative container top-[50%] -translate-y-1/2 p-6 mx-auto h-3/4 flex flex-col justify-center"
-    ></section>
-  </section>
+  <svg class="absolute left-0 bottom-0 w-full md:translate-y-16 fill-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,192L48,181.3C96,171,192,149,288,154.7C384,160,480,192,576,208C672,224,768,224,864,218.7C960,213,1056,203,1152,192C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+</section>
 
-  <!-- Tentang -->
-  <section id="tentang" class="relative h-full bg-gray-100">
-    <!-- Info | Maps -->
-    <section class="relative container md:mx-auto top-[50%] -translate-y-1/2 p-8 md:grid gap-8" style="grid-template-columns: 3fr 2fr;">
-      <section class="mb-8 md:mb-0">
-        <div class="grid gap-6">
-          <h2 class="text-4xl font-bold">Tentang SMP Ibu Kartini</h2>
-          <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eligendi minima doloribus aut. Voluptas nulla error consequatur ad odit? Nulla harum accusamus repudiandae minima porro modi dolor dolorem illum distinctio quisquam!</p>
-          <div class="flex flex-col gap-2">
-            <div id="location" class="flex gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
-              <div>Jl. Imam Bonjol No.199, Pendrikan Kidul, Kec. Semarang Tengah, Kota Semarang, Jawa Tengah 50172</div>
-            </div>
-            <div id="phone" class="flex gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              <div>0243515441</div>
-            </div>
+<!-- Kegiatan -->
+<section id="kegiatan" class="relative h-full text-white bg-primary shadow-lg">
+  <!-- Carousel -->
+  <section
+    hx-get="/events" hx-trigger="load"
+    class="relative container top-[50%] -translate-y-1/2 p-6 mx-auto h-3/4 flex flex-col justify-center"
+  ></section>
+</section>
+
+<!-- Tentang -->
+<section id="tentang" class="relative h-full bg-gray-100">
+  <!-- Info | Maps -->
+  <section class="relative container md:mx-auto top-[50%] -translate-y-1/2 p-8 md:grid gap-8" style="grid-template-columns: 3fr 2fr;">
+    <section class="mb-8 md:mb-0">
+      <div class="grid gap-6">
+        <h2 class="text-4xl font-bold">Tentang SMP Ibu Kartini</h2>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eligendi minima doloribus aut. Voluptas nulla error consequatur ad odit? Nulla harum accusamus repudiandae minima porro modi dolor dolorem illum distinctio quisquam!</p>
+        <div class="flex flex-col gap-2">
+          <div id="location" class="flex gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+            <div>Jl. Imam Bonjol No.199, Pendrikan Kidul, Kec. Semarang Tengah, Kota Semarang, Jawa Tengah 50172</div>
+          </div>
+          <div id="phone" class="flex gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <div>0243515441</div>
           </div>
         </div>
-      </section>
-
-      <!-- width="600" height="450" -->
-      <section class="w-full *:aspect-video *:w-full">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d990.0578600797458!2d110.41016842658252!3d-6.981992861535967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e70f4ac35e6376b%3A0x528c6f2e8e8e0fbd!2sSMP%20Ibu%20Kartini!5e0!3m2!1sen!2sid!4v1740045939677!5m2!1sen!2sid"
-          style="border:0;"
-          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-        ></iframe>
-      </section>
-    </section>
-
-    <!-- Footer -->
-    <section class="absolute left-0 bottom-0 w-full px-8 text-white bg-primary">
-      <div class="py-6 container mx-auto font-bold">
-        @2025 SMP Ibu Kartini
       </div>
     </section>
 
-    <svg class="absolute top-0 left-0 w-full rotate-180 fill-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,192L48,181.3C96,171,192,149,288,154.7C384,160,480,192,576,208C672,224,768,224,864,218.7C960,213,1056,203,1152,192C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+    <!-- width="600" height="450" -->
+    <section class="w-full *:aspect-video *:w-full">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d990.0578600797458!2d110.41016842658252!3d-6.981992861535967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e70f4ac35e6376b%3A0x528c6f2e8e8e0fbd!2sSMP%20Ibu%20Kartini!5e0!3m2!1sen!2sid!4v1740045939677!5m2!1sen!2sid"
+        style="border:0;"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </section>
   </section>
 
+  <!-- Footer -->
+  <section class="absolute left-0 bottom-0 w-full px-8 text-white bg-primary">
+    <div class="py-6 container mx-auto font-bold">
+      @2025 SMP Ibu Kartini
+    </div>
+  </section>
 
-  <script type="text/javascript">
-    document.body.addEventListener('htmx:afterSettle', function (ev) {
-      if (!ev.target.querySelector(".embla")) {
-        return;
-      }
-      const emblaNode = document.querySelector('.embla')
-      const options = { loop: false }
-      const emblaApi = EmblaCarousel(emblaNode, options)
-      console.log(emblaApi.slideNodes()) // Access API
-    });
-  </script>
-</body>
-</html>
+  <svg class="absolute top-0 left-0 w-full rotate-180 fill-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill-opacity="1" d="M0,192L48,181.3C96,171,192,149,288,154.7C384,160,480,192,576,208C672,224,768,224,864,218.7C960,213,1056,203,1152,192C1248,181,1344,171,1392,165.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+</section>
 
+
+<script type="text/javascript">
+  document.body.addEventListener('htmx:afterSettle', function (ev) {
+    if (!ev.target.querySelector(".embla")) {
+      return;
+    }
+    const emblaNode = document.querySelector('.embla')
+    const options = { loop: false }
+    const emblaApi = EmblaCarousel(emblaNode, options)
+    console.log(emblaApi.slideNodes()) // Access API
+  });
+</script>
+
+{% endblock %}

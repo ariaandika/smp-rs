@@ -1,6 +1,7 @@
-assets/output.css
+/node_modules
 /target
 .env
+assets/output.css
 assets/local
 db.sql*
 /stash

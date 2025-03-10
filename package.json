@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "dev": "bun run assets/preview.js & ./node_modules/.bin/tailwindcss -i assets/app.css -o assets/output.css --watch",
+    "tw-dev": ""
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.0.12",
+    "nunjucks": "^3.2.4",
+    "tailwindcss": "^4.0.12"
+  }
+}

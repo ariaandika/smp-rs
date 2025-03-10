@@ -1,4 +1,6 @@
-@import "tailwindcss";
+/* tailwind scan anything and output anything, its terrible */
+@import "tailwindcss" source(none);
+@source "../templates/*";
 
 @theme {
   --color-primary: var(--color-green-600);
