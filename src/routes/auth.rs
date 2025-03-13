@@ -5,9 +5,9 @@ use crate::{
 };
 use argon2::{Argon2, PasswordHash, PasswordVerifier};
 use axum::{extract::State, response::{Html, IntoResponse, Redirect}, Form, Json};
-use rinja::Template;
 use rusqlite::OptionalExtension;
 use serde::Deserialize;
+use tour::Template;
 
 const STOCK_PASSWD: &str = "$argon2id$v=19$m=19456,t=2,p=1$3lYyG6puInCkN/I/NXEQ9Q$CCIFuJ8fNDvSr0bPXYCoSCytqVvp0j7GTVmyLdNhrQQ";
 
