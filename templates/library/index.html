@@ -1,0 +1,45 @@
+<section class="container mx-auto mb-4 p-8 rounded-md bg-white shadow-md">
+  <h2 class="text-4xl font-bold">Presensi</h2>
+  <div>Tahun Ajaran 2024/2025</div>
+</section>
+
+<form class="container mx-auto mb-4 p-8 grid gap-2 rounded-md bg-white shadow-md" method="post">
+  <div class="grid gap-2">
+    <span>Nama</span>
+    <input type="text">
+  </div>
+
+  <div class="grid gap-2">
+    <span>Kelas</span>
+    <input type="text">
+  </div>
+
+  <div class="grid gap-2">
+    <span>Keperluan</span>
+    <textarea name="" id=""></textarea>
+  </div>
+
+  <div class="my-4">
+    <button class="btn-primary">Presensi</button>
+  </div>
+</form>
+
+<section class="container mx-auto p-8 rounded-md bg-white shadow-md">
+  <section class="grid books-table" style="grid-template-columns: 2.5rem 1fr 2fr 1fr 1fr 3fr;">
+    <div class="no head">No</div>
+    <div class="head">Tanggal</div>
+    <div class="head">Nama</div>
+    <div class="head">Kelas</div>
+    <div class="head">Waktu</div>
+    <div class="head">Keperluan</div>
+    <!-- Row -->
+    {{ for i in 1..6 }}
+      <div class="no">1</div>
+      <div>18 April 2004</div>
+      <div>Aria Putra Andika</div>
+      <div>7B</div>
+      <div>08.30</div>
+      <div>Membaca buku</div>
+    {{ endfor }}
+  </section>
+</section>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/assets/output.css">
+  <title>Library</title>
+</head>
+<body class="bg-gray-100 pt-48">
+
+  <nav class="fixed top-0 left-0 w-full">
+    <div class="text-white bg-gray-800">
+      <div class="container mx-auto ">
+        <h2 class="py-4 text-4xl font-bold">Perpustakaan</h2>
+      </div>
+    </div>
+
+    <div class="bg-white shadow-md">
+      <div class="container mx-auto flex gap-4 text-xl font-bold">
+        <a class="nav-link" {{ if *path == "/library" }} data-active {{ endif }} href="/library">Beranda</a>
+        <a class="nav-link" {{ if *path == "/library/books" }} data-active {{ endif }} href="/library/books">Buku</a>
+        <a class="nav-link" {{ if *path == "/library/add" }} data-active {{ endif }} href="/library">Tambah</a>
+      </div>
+    </div>
+  </nav>
+
+  {{ unsafe body }}
+
+  <footer class="mt-48">
+    &ThickSpace;
+  </footer>
+</body>
+</html>
+
+

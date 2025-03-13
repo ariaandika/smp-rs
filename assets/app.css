@@ -23,9 +23,28 @@
     @apply cursor-pointer;
   }
 
+  input,textarea {
+    @apply px-3 py-1.5
+    border border-gray-300
+    focus:outline-2 focus:outline-primary
+    rounded-md
+  }
 }
 
 @layer component {
+  .books-table {
+    * {
+      @apply py-1.5 px-2;
+    }
+    .no {
+      @apply text-center;
+    }
+    .head {
+      @apply font-bold border-b border-gray-500;
+    }
+  }
+
+
   .input {
     @apply px-3 py-1.5 border border-2 border-gray-300 focus:outline-none focus:border-primary rounded-md;
   }
@@ -34,3 +53,17 @@
     @apply block px-3 py-3 hover:bg-gray-700 transition-colors cursor-pointer rounded-md;
   }
 }
+
+@utility btn-primary {
+  @apply px-3 py-1.5 font-bold bg-primary text-white rounded-md
+  hover:bg-primary/80 transition-colors cursor-pointer;
+}
+
+@utility nav-link {
+  @apply
+    px-4 py-3
+    hover:bg-gray-200
+    border-b-2 border-transparent data-active:border-primary
+    transition-colors cursor-pointer;
+}
+

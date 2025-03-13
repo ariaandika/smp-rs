@@ -1,4 +1,4 @@
-import page from "../templates/index.html"
+import page from "../templates/admin/events.html"
 
 Bun.serve({
   routes: {

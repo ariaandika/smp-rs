@@ -5,6 +5,8 @@ use tower_http::services::ServeFile;
 use crate::config;
 
 mod auth;
+mod home;
+mod library;
 
 pub type Global = Arc<GlobalState>;
 
@@ -23,9 +25,12 @@ impl GlobalState {
 
 pub fn routes(state: GlobalState) -> Router {
     Router::new()
+        .route("/", get(home::home))
         .route("/login", get(auth::login_page).post(auth::login))
         .route("/session", get(auth::session))
         .route("/logout", get(auth::logout))
+        .route("/library", get(library::page))
+        .route("/library/books", get(library::books))
         .nest_service("/assets/output.css", ServeFile::new("assets/output.css"))
         .with_state(Arc::new(state))
 }
