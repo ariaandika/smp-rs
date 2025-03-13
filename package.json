@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "bun run assets/preview.js & ./node_modules/.bin/tailwindcss -i assets/app.css -o assets/output.css --watch",
-    "tw-dev": ""
+    "build": "./node_modules/.bin/tailwindcss -i assets/app.css -o assets/output.css --minify --optimize"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.0.12",
