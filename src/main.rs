@@ -3,6 +3,7 @@ use tokio::net::TcpListener;
 
 mod config;
 mod auth;
+mod models;
 mod routes;
 mod error;
 

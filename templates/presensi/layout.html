@@ -17,9 +17,13 @@
 
     <div class="bg-white shadow-md">
       <div class="container mx-auto flex gap-4 text-xl font-bold">
-        <a class="nav-link" {{ if self.path == "/library" }} data-active {{ endif }} href="/library">Beranda</a>
-        <a class="nav-link" {{ if self.path == "/library/books" }} data-active {{ endif }} href="/library/books">Buku</a>
-        <a class="nav-link" {{ if self.path == "/library/add" }} data-active {{ endif }} href="/library">Tambah</a>
+        <a
+          class="nav-link"
+          {{ if self.path == "/presensi" }} data-active {{ endif }}
+          href="/presensi"
+        >
+          Beranda
+        </a>
       </div>
     </div>
   </nav>
@@ -31,5 +35,4 @@
   </footer>
 </body>
 </html>
-
 

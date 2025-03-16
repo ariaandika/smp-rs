@@ -1,7 +1,7 @@
 use rusqlite::Row;
 use serde::{Deserialize, Serialize};
 
-pub use session::{Session, logout_cookie};
+pub use session::logout_cookie;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Users {
@@ -17,6 +17,23 @@ impl Users {
             password: value.get("password")?,
         })
     }
+}
+
+/// client session
+///
+/// # `FromRequestParts`
+///
+/// extract token from cookie and decode it to acquire session
+///
+/// if session invalid or not found, redirect to /login
+///
+/// # `IntoResponseParts`
+///
+/// encode to a token then set a cookie
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Session {
+    pub exp: u64,
+    pub user: Users,
 }
 
 mod session {
@@ -47,23 +64,6 @@ mod session {
     /// removal session cookie
     pub fn logout_cookie() -> impl IntoResponseParts {
         [("Set-Cookie",format!("{COOKIE_KEY}=; Path=/; HttpOnly; Expires=Wed, 21 Oct 2015 07:28:00 GMT{SECURE}"))]
-    }
-
-    /// client session
-    ///
-    /// # `FromRequestParts`
-    ///
-    /// extract token from cookie and decode it to acquire session
-    ///
-    /// if session invalid or not found, redirect to /login
-    ///
-    /// # `IntoResponseParts`
-    ///
-    /// encode to a token then set a cookie
-    #[derive(Debug, Serialize, Deserialize)]
-    pub struct Session {
-        pub exp: u64,
-        pub user: Users,
     }
 
     impl Session {
