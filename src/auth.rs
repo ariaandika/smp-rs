@@ -38,7 +38,6 @@ pub struct Session {
 
 mod session {
     use super::*;
-    use crate::config;
     use axum::response::IntoResponseParts;
     use axum::{
         extract::FromRequestParts,
@@ -49,9 +48,9 @@ mod session {
     use std::sync::LazyLock;
 
     static DECODE_KEY: LazyLock<DecodingKey> =
-        LazyLock::new(|| DecodingKey::from_secret(config::env("JWT_SECRET").as_bytes()));
+        LazyLock::new(|| DecodingKey::from_secret(include_bytes!("../dist/JWT_SECRET")));
     static ENCODE_KEY: LazyLock<EncodingKey> =
-        LazyLock::new(|| EncodingKey::from_secret(config::env("JWT_SECRET").as_bytes()));
+        LazyLock::new(|| EncodingKey::from_secret(include_bytes!("../dist/JWT_SECRET")));
 
     const COOKIE_KEY: &str = "token";
     const SECURE: &str = if cfg!(debug_assertions) { "" } else { "; Secure" };

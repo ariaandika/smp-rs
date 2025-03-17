@@ -12,7 +12,6 @@ mod error;
 
 fn main() -> anyhow::Result<()> {
     dotenvy::dotenv().ok();
-    config::env_assert("JWT_SECRET")?;
     config::env_assert("DATABASE_URL")?;
 
     let state = routes::GlobalState::setup()?;
