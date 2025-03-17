@@ -1,8 +1,15 @@
-use std::fs;
+use std::{env, fs, process::Command};
 use chrono::{DateTime, Utc};
 
 
 fn main() {
+    if matches!(env::var("PROFILE").as_deref(),Ok("release")) {
+        Command::new("./dist/tailwind")
+            .args(["-i","assets/app.css","-o","dist/output@0.1.css","--minify","--optimize"])
+            .status()
+            .unwrap();
+    }
+
     gen_tag("./dist/output@0.1.css");
     gen_stamp("./dist/output@0.1.css");
     gen_stamp("./dist/hx@2.0.4.js");
