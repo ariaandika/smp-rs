@@ -2,6 +2,9 @@ use anyhow::Context;
 use tokio::net::TcpListener;
 
 mod config;
+mod helpers;
+
+mod assets;
 mod auth;
 mod models;
 mod routes;
@@ -17,6 +20,10 @@ fn main() -> anyhow::Result<()> {
     let tcp = std::net::TcpListener::bind(config::host())
         .with_context(|| format!("failed to bind {}", config::host()))?;
     tcp.set_nonblocking(true)?;
+
+    #[cfg(debug_assertions)]
+    assets::tw_build();
+
     tokio::runtime::Builder::new_multi_thread()
         .enable_io()
         .build()?

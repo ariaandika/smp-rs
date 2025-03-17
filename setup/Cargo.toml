@@ -1,9 +1,0 @@
-[package]
-name = "setup"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
-anyhow = "1.0.97"
-const_format = "0.2.34"
-ureq = "3.0.9"

@@ -1,8 +1,10 @@
-use std::sync::{Arc, Mutex};
+use crate::{
+    assets::{CAROUSEL, HX, CSS},
+    config,
+};
 use axum::{routing::get, Router};
 use rusqlite::Connection;
-use tower_http::services::ServeFile;
-use crate::config;
+use std::sync::{Arc, Mutex};
 
 mod auth;
 mod home;
@@ -39,9 +41,10 @@ pub fn routes(state: GlobalState) -> Router {
                 .route("/", get(presensi::page))
         )
         .route("/library/books", get(library::books))
-        .nest_service("/dist/output.css", ServeFile::new("dist/output.css"))
-        .nest_service("/dist/hx.js", ServeFile::new("dist/hx.js"))
-        .nest_service("/dist/carousel.js.", ServeFile::new("dist/carousel.js"))
         .with_state(Arc::new(state))
+
+        .nest_service(CSS.serve_path, CSS)
+        .nest_service(HX.serve_path, HX)
+        .nest_service(CAROUSEL.serve_path, CAROUSEL)
 }
 
