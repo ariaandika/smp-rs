@@ -4,6 +4,9 @@ version = "0.1.0"
 edition = "2021"
 default-run = "smp-rs"
 
+[workspace]
+members = ["setup"]
+
 [dependencies]
 anyhow = "1.0.97"
 argon2 = "0.5.3"

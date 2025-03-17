@@ -1,7 +1,4 @@
-/node_modules
 /target
+/dist
 .env
-assets/output.css
-assets/local
 db.sql*
-/stash

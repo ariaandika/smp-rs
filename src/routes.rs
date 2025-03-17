@@ -39,7 +39,9 @@ pub fn routes(state: GlobalState) -> Router {
                 .route("/", get(presensi::page))
         )
         .route("/library/books", get(library::books))
-        .nest_service("/assets/output.css", ServeFile::new("assets/output.css"))
+        .nest_service("/dist/output.css", ServeFile::new("dist/output.css"))
+        .nest_service("/dist/hx.js", ServeFile::new("dist/hx.js"))
+        .nest_service("/dist/carousel.js.", ServeFile::new("dist/carousel.js"))
         .with_state(Arc::new(state))
 }
 
